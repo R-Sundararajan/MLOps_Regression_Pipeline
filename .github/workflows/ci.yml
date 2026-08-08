@@ -46,8 +46,10 @@ jobs:
       # ---------------------------------------------------------------
 
       - name: Run tests
+        env:
+          PYTHONPATH: ${{ github.workspace }}
         run: |
-          pytest -q
+          python -m pytest -q
 
       # ---------------------------------------------------------------
       # 5. Build Docker image
