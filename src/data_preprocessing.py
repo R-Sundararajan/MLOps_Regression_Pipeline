@@ -9,7 +9,10 @@ RANDOM_STATE = 42
 
 
 def main():
-    df = pd.read_csv("data/raw/diabetes.csv")
+    df = pd.read_csv(
+    "data/raw/winequality-white.csv",
+    sep=","
+)
 
     train, test = train_test_split(
         df,

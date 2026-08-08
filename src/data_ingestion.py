@@ -1,19 +1,25 @@
-# src/data_ingestion.py
-
 from pathlib import Path
-from sklearn.datasets import load_diabetes
+import pandas as pd
 
+URL = (
+    "https://archive.ics.uci.edu/"
+    "ml/machine-learning-databases/"
+    "wine-quality/"
+    "winequality-white.csv"
+)
 
-def main():
-    output_path = Path("data/raw/diabetes.csv")
-    output_path.parent.mkdir(parents=True, exist_ok=True)
+output = Path("data/raw/winequality-white.csv")
+output.parent.mkdir(parents=True, exist_ok=True)
 
-    dataset = load_diabetes(as_frame=True)
-    dataset.frame.to_csv(output_path, index=False)
+df = pd.read_csv(
+    URL,
+    sep=";"
+)
 
-    print(f"Saved dataset to {output_path}")
+df.to_csv(
+    output,
+    index=False
+)
 
-
-if __name__ == "__main__":
-    main()
-    
+print(f"Saved dataset to {output}")
+print(f"Shape: {df.shape}")
