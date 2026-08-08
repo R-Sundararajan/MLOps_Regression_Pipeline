@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environment
+myenv/
+venv/
+.venv/
+
+# Git
+.git/
+.gitignore
+
+# DVC
+.dvc/
+dvc.lock
+dvc.yaml
+
+# Data
+data/
+
+# MLflow
+mlruns/
+mlflow.db
+
+# Training artifacts
+models/candidates/
+
+# Reports
+reports/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Python cache
+.pytest_cache/

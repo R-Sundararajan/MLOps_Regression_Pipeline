@@ -7,40 +7,33 @@ import pandas as pd
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-import uvicorn
 
 
 # ---------------------------------------------------------------------
-# Configuration
+# Model
 # ---------------------------------------------------------------------
 
-MODEL_PATH = (
-    Path(__file__).resolve().parent.parent
-    / "models"
-    / "champion_model.joblib"
-)
+BASE_DIR = Path(__file__).resolve().parent.parent
 
+MODEL_PATH = BASE_DIR / "models" / "champion_model.joblib"
 
-# ---------------------------------------------------------------------
-# Load model
-# ---------------------------------------------------------------------
+model = None
+model_load_error = None
+
 
 try:
     model = joblib.load(MODEL_PATH)
-    model_loaded = True
 except Exception as e:
-    model = None
-    model_loaded = False
     model_load_error = str(e)
 
 
 # ---------------------------------------------------------------------
-# FastAPI application
+# FastAPI
 # ---------------------------------------------------------------------
 
 app = FastAPI(
     title="Wine Quality Prediction API",
-    description="API for predicting wine quality using the champion ML model.",
+    description="Wine quality prediction using the champion ML model",
     version="1.0.0",
 )
 
@@ -64,7 +57,7 @@ class WineFeatures(BaseModel):
 
 
 # ---------------------------------------------------------------------
-# Root endpoint
+# Root
 # ---------------------------------------------------------------------
 
 @app.get("/")
@@ -75,13 +68,13 @@ def root():
 
 
 # ---------------------------------------------------------------------
-# Health endpoint
+# Health
 # ---------------------------------------------------------------------
 
 @app.get("/health")
 def health():
 
-    if not model_loaded:
+    if model is None:
         return {
             "status": "unhealthy",
             "model_loaded": False,
@@ -96,19 +89,18 @@ def health():
 
 
 # ---------------------------------------------------------------------
-# Prediction endpoint
+# Prediction
 # ---------------------------------------------------------------------
 
 @app.post("/predict")
 def predict(features: WineFeatures):
 
-    if not model_loaded:
+    if model is None:
         raise HTTPException(
             status_code=503,
             detail="Model is not loaded",
         )
 
-    # Convert request to DataFrame
     input_data = pd.DataFrame(
         [
             {
@@ -128,33 +120,14 @@ def predict(features: WineFeatures):
     )
 
     try:
-
-        prediction = model.predict(
-            input_data
-        )
+        prediction = model.predict(input_data)
 
         return {
             "prediction": float(prediction[0])
         }
 
     except Exception as e:
-
         raise HTTPException(
             status_code=500,
             detail=f"Prediction failed: {str(e)}",
         )
-
-
-# ---------------------------------------------------------------------
-# Run with Uvicorn
-# ---------------------------------------------------------------------
-
-if __name__ == "__main__":
-
-    uvicorn.run(
-        "server.app:app",
-        host="0.0.0.0",
-        port=8000,
-        reload=True,
-    )
-
