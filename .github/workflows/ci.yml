@@ -1,0 +1,59 @@
+# .github/workflows/ci.yml
+
+name: Regression Pipeline CI
+
+on:
+  push:
+
+jobs:
+  test-and-build:
+    name: Test and Build Docker Image
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+
+      # ---------------------------------------------------------------
+      # 1. Checkout repository
+      # ---------------------------------------------------------------
+
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      # ---------------------------------------------------------------
+      # 2. Setup Python
+      # ---------------------------------------------------------------
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      # ---------------------------------------------------------------
+      # 3. Install dependencies
+      # ---------------------------------------------------------------
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r venv_requirements.txt
+
+      # ---------------------------------------------------------------
+      # 4. Run tests
+      # ---------------------------------------------------------------
+
+      - name: Run tests
+        run: |
+          pytest -q
+
+      # ---------------------------------------------------------------
+      # 5. Build Docker image
+      # ---------------------------------------------------------------
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            -t wine-quality-api:${{ github.sha }} .
