@@ -10,19 +10,21 @@ The project uses the **Wine Quality** dataset as a regression problem. The pipel
 
 > Reference: `Project_Briefing.pdf` specifies the required DVC, ML pipeline, MLflow, prediction API, Docker, and GitHub Actions phases.
 
-## Evidence / Screenshots
+## Project Evidence
+
+All screenshots and supporting files are available in the output folder:
+
+[View output folder](./output/)
 
 ### 1. DVC — Pipeline Reproduction
 
 The DVC pipeline is reproduced using `dvc repro`. The screenshot shows the project stages executing and the DVC lock file being updated.
 
-[View DVC reproduction screenshot](./01_dvc_repro.png)
 
 ### 2. DVC — Pipeline DAG
 
 The DVC DAG demonstrates the dependency flow between data ingestion, preprocessing, feature engineering, model building, and model evaluation.
 
-[View DVC DAG screenshot](./02_dvc_dag.png)
 
 ### 3. MLflow — Experiment Tracking
 
@@ -34,7 +36,6 @@ MLflow is used to track the regression experiments. The experiment contains runs
 
 Multiple hyperparameter configurations are evaluated and metrics including R², MAE, MSE, and RMSE are recorded. The MLflow UI is used to compare the candidate models and identify the strongest run.
 
-[View MLflow experiment screenshot](./03_mlflow_experiments.png)
 
 ### 4. FastAPI — API Running
 
@@ -52,7 +53,6 @@ Example response:
 }
 ```
 
-[View FastAPI root endpoint screenshot](./04_fastapi_root.png)
 
 ### 5. FastAPI — Prediction Endpoint
 
@@ -64,7 +64,6 @@ Endpoint:
 
 The screenshot demonstrates a successful HTTP 200 response from the prediction service.
 
-[View FastAPI prediction screenshot](./05_fastapi_prediction.png)
 
 ### 6. Docker — Containerized Application
 
@@ -77,7 +76,6 @@ The Docker image contains:
 - Champion model (`champion_model.joblib`)
 - Uvicorn startup configuration
 
-[View Docker build/container screenshot](./06_docker_container.png)
 
 ---
 
